@@ -1,0 +1,17 @@
+GET http://localhost:3000 HTTP/1.1
+
+###
+
+GET http://localhost:3000/info.txt
+
+###
+
+POST http://localhost:3000/hi HTTP/1.1
+
+this is me
+
+###
+
+PUT http://localhost:3000/info.txt
+
+salam!
