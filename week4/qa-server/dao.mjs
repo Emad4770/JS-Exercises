@@ -12,7 +12,19 @@ const db = new sqlite.Database('questions.sqlite', (err) => {
 /** QUESTIONS **/
 // get all the questions
 export const listQuestions = () => {
-  // write something clever
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT id, text FROM question`
+    db.all(sql, (err, rows) => {
+      if (err)
+        reject(err)
+      else if (rows === undefined)
+        resolve("There are no Questions in the Database, Try later!")
+      else {
+        const qList = rows.map((row) => { return new Question(row.id, row.text) })
+        resolve(qList)
+      }
+    })
+  })
 }
 
 // get a question given its id

@@ -1,6 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
-import { getQuestion, addQuestion } from './dao.mjs'
+import { getQuestion, addQuestion, listQuestions } from './dao.mjs'
 import { Question } from './QAModels.mjs'
 import dayjs from 'dayjs'
 // import dao from './dao.mjs'
@@ -22,7 +22,13 @@ app.get('/questions/:id', (req, res) => {
 })
 // Get a list of questions
 app.get('/questions', (req, res) => {
-    res.send("Not implemented yet")
+
+    listQuestions().then((list) => {
+        res.json(list)
+    }).catch((err) => {
+        res.sendStatus(500).send("Database error " + err)
+    })
+
 })
 
 // Add a new question

@@ -13,7 +13,7 @@ function Question(id, text, email, date) {
   this.id = id;
   this.text = text;
   this.email = email;
-  this.date = dayjs(date);
+  this.date = date && dayjs(date);
 }
 
 export { Question, Answer };
