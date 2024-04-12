@@ -29,17 +29,12 @@ app.get('/questions', (req, res) => {
 app.post('/questions', (req, res) => {
     const authorEmail = req.body.email
     const questionText = req.body.text
-    console.log(authorEmail);
-
     const question = new Question(1, questionText, authorEmail, dayjs())
     addQuestion(question).then((id) => {
-
-        res.send(`Id: ${id}`)
-
+        res.json({ id: id, text: questionText, email: authorEmail, date: dayjs() })
     }).catch((err) => {
         res.sendStatus(500).send("Database error: " + err)
     })
-
 })
 
 
