@@ -1,6 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
-import { getQuestion, addQuestion, listQuestions } from './dao.mjs'
+import { getQuestion, addQuestion, listQuestions, listAnswersOf } from './dao.mjs'
 import { Question } from './QAModels.mjs'
 import dayjs from 'dayjs'
 // import dao from './dao.mjs'
@@ -9,6 +9,8 @@ import dayjs from 'dayjs'
 const app = express()
 app.use(morgan('common'))
 app.use(express.json())
+
+/** QUESTIONS **/
 
 // Get a question by id
 app.get('/questions/:id', (req, res) => {
@@ -30,7 +32,6 @@ app.get('/questions', (req, res) => {
     })
 
 })
-
 // Add a new question
 app.post('/questions', (req, res) => {
     const authorEmail = req.body.email
@@ -41,6 +42,19 @@ app.post('/questions', (req, res) => {
     }).catch((err) => {
         res.sendStatus(500).send("Database error: " + err)
     })
+})
+
+/** ANSWERS **/
+
+// Get all answers for a question
+app.get('/questions/:id/answers', (req, res) => {
+    const questionId = req.params.id
+    listAnswersOf(questionId).then((answers) => {
+        res.json(answers)
+    }).catch((err) => {
+        res.status(500).send("Database error: " + err)
+    })
+
 })
 
 

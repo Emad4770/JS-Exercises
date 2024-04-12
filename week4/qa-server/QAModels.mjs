@@ -6,7 +6,7 @@ function Answer(id, text, email, date, score = 0) {
   this.text = text;
   this.email = email;
   this.score = score;
-  this.date = dayjs(date);
+  this.date = date && dayjs(date);
 }
 
 function Question(id, text, email, date) {

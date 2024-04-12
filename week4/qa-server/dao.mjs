@@ -18,7 +18,7 @@ export const listQuestions = () => {
       if (err)
         reject(err)
       else if (rows === undefined)
-        resolve("There are no Questions in the Database, Try later!")
+        resolve({ error: "There are no Questions in the Database, Try later!" })
       else {
         const qList = rows.map((row) => { return new Question(row.id, row.text) })
         resolve(qList)
@@ -72,9 +72,12 @@ export const listAnswersOf = (questionId) => {
   return new Promise((resolve, reject) => {
     const sql = `SELECT answer.*, user.email FROM answer JOIN user ON answer.authorId=user.id
     WHERE answer.questionId = ?`;
-    db.all(sql, [this.id], (err, rows) => {
+    db.all(sql, [questionId], (err, rows) => {
       if (err)
         reject(err)
+      else if (rows.length == 0) {
+        resolve({ error: "There are no answers for this question" })
+      }
       else {
         const answers = rows.map((ans) => new Answer(ans.id, ans.text, ans.email, ans.date, ans.score));
         resolve(answers);
