@@ -23,7 +23,7 @@ export const getQuestion = (id) => {
       if (err)
         reject(err);
       else if (row === undefined)
-        resolve({error: "Question not available, check the inserted id."});
+        resolve({ error: "Question not available, check the inserted id." });
       else {
         resolve(new Question(row.id, row.text, row.email, row.date));
       }
@@ -39,7 +39,7 @@ export const addQuestion = (question) => {
       if (err)
         reject(err);
       else if (row === undefined)
-        resolve({error: "Author not available, check the inserted email."});
+        resolve({ error: "Author not available, check the inserted email." });
       else {
         sql = 'INSERT INTO question(text, authorId, date) VALUES(?,?,DATE(?))';
         db.run(sql, [question.text, row.id, question.date.toISOString()], function (err) {
@@ -58,7 +58,8 @@ export const addQuestion = (question) => {
 // get all the answer of a given question
 export const listAnswersOf = (questionId) => {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT answer.*, user.email FROM answer JOIN user ON answer.authorId=user.id WHERE answer.questionId = ?';
+    const sql = `SELECT answer.*, user.email FROM answer JOIN user ON answer.authorId=user.id
+    WHERE answer.questionId = ?`;
     db.all(sql, [this.id], (err, rows) => {
       if (err)
         reject(err)
@@ -78,7 +79,7 @@ export const addAnswer = (answer) => {
       if (err)
         reject(err);
       else if (row === undefined)
-        resolve({error: "Author not available, check the inserted email."});
+        resolve({ error: "Author not available, check the inserted email." });
       else {
         sql = "INSERT INTO answer(text, authorId, date, score, questionId) VALUES (?, ?, DATE(?), ?, ?)";
         db.run(sql, [answer.text, row.id, answer.date.toISOString(), answer.score, this.id], function (err) {

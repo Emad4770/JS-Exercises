@@ -1,1 +1,12 @@
-GET http://localhost:3000/questions/111
+GET http://localhost:3000/questions/11
+
+###
+
+GET http://localhost:3000/questions
+
+###
+
+POST http://localhost:3000/questions HTTP/1.1
+header name: header value
+
+helolo
