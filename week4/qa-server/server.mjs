@@ -3,14 +3,6 @@ import morgan from 'morgan'
 import { getQuestion, addQuestion, listQuestions, listAnswersOf, addAnswer } from './dao.mjs'
 import { Answer, Question } from './QAModels.mjs'
 import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc.js'
-import timezone from 'dayjs/plugin/timezone.js'
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-
-const timestamp = "2014-06-01 12:00"
-const tz = "America/New_York"
 // import dao from './dao.mjs'
 //     dao.getQuestion
 
