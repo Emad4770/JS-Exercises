@@ -3,6 +3,7 @@
 
 import sqlite from 'sqlite3';
 import { Question, Answer } from './QAModels.mjs';
+import dayjs from 'dayjs';
 
 // open the database
 const db = new sqlite.Database('questions.sqlite', (err) => {
@@ -58,7 +59,7 @@ export const addQuestion = (question) => {
           if (err)
             reject(err);
           else
-            resolve(this.lastID);
+            resolve(new Question(this.lastID, question.text, question.email, dayjs()));
         });
       }
     });
@@ -87,7 +88,7 @@ export const listAnswersOf = (questionId) => {
 }
 
 // add a new answer
-export const addAnswer = (answer) => {
+export const addAnswer = (answer, questionId) => {
   return new Promise((resolve, reject) => {
     let sql = 'SELECT id from user WHERE email = ?';
     db.get(sql, [answer.email], (err, row) => {
@@ -96,13 +97,23 @@ export const addAnswer = (answer) => {
       else if (row === undefined)
         resolve({ error: "Author not available, check the inserted email." });
       else {
-        sql = "INSERT INTO answer(text, authorId, date, score, questionId) VALUES (?, ?, DATE(?), ?, ?)";
-        db.run(sql, [answer.text, row.id, answer.date.toISOString(), answer.score, this.id], function (err) {
+        let sql = 'SELECT id from question WHERE id = ?';
+        db.get(sql, [questionId], (err, row) => {
           if (err)
-            reject(err);
-          else
-            resolve(this.lastID);
-        });
+            reject(err)
+          else if (row === undefined)
+            resolve({ error: "This question is not available, check the inserted id." })
+          else {
+            let sql = "INSERT INTO answer(text, authorId, date, score, questionId) VALUES (?, ?, DATE(?), ?, ?)";
+            db.run(sql, [answer.text, row.id, answer.date.toISOString(), answer.score, questionId], function (err) {
+              if (err)
+                reject(err);
+              else
+                resolve(new Answer(this.lastID, answer.text, answer.email, answer.date, 0));
+            });
+
+          }
+        })
       }
     });
   });

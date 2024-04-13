@@ -126,3 +126,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 week4/qa-server/questions.sqlite
+week4/qa-server/questions.sqlite
