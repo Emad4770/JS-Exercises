@@ -121,7 +121,28 @@ export const addAnswer = (answer, questionId) => {
 
 // update an existing answer
 export const updateAnswer = (answer) => {
-  // write something clever
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT id FROM answer
+    WHERE id = ?`
+    db.get(sql, [answer.id], (err, row) => {
+      if (err)
+        reject(err)
+      else if (row === undefined) {
+        resolve({ error: "There is no answer with this id, please check the answer id!" })
+      }
+      else {
+        const sql = `UPDATE answer
+        SET "text" = ?, date = DATE(?)
+        WHERE id = ?`;
+        db.run(sql, [answer.text, answer.date.toISOString(), answer.id], function (err) {
+          if (err)
+            reject(err)
+          else
+            resolve(new Answer(answer.id, answer.text, answer.email, dayjs(), this.score))
+        })
+      }
+    })
+  })
 }
 
 // vote for an answer

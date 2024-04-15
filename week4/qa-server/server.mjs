@@ -1,6 +1,6 @@
 import express, { text } from 'express'
 import morgan from 'morgan'
-import { getQuestion, addQuestion, listQuestions, listAnswersOf, addAnswer } from './dao.mjs'
+import { getQuestion, addQuestion, listQuestions, listAnswersOf, addAnswer, updateAnswer } from './dao.mjs'
 import { Answer, Question } from './QAModels.mjs'
 import dayjs from 'dayjs'
 // import dao from './dao.mjs'
@@ -55,9 +55,7 @@ app.get('/questions/:id/answers', (req, res) => {
         res.status(500).send("Database error: " + err)
     })
 })
-
 // Add an answer to a question
-
 app.post('/questions/:id/answers', (req, res) => {
     const questionId = req.params.id
     const answerText = req.body.text
@@ -69,5 +67,37 @@ app.post('/questions/:id/answers', (req, res) => {
     })
 
 })
+// Modify an answer
+app.put('/answers/:id', (req, res) => {
+    const answerId = req.params.id
+    const newText = req.body.text
+    const newDate = dayjs()
+    const newAnswer = new Answer(answerId, newText, "", newDate, 0)
+
+    updateAnswer(newAnswer).then((a) => {
+
+        res.json(a.error || { id: a.id, text: a.text, date: a.date })
+    }).catch((err) => {
+        res.status(500).send("Database error: " + err)
+    })
+
+})
+
+
+/** USERS */
+
+// Get all answers of a user
+app.get('/users/:id/answers', (req, res) => {
+    res.send("Note yet implemented!")
+})
+
+
+
+
+
+
+
+
+
 
 app.listen(3000, () => { console.log("Running!") })
