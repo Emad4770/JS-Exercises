@@ -82,6 +82,10 @@ app.put('/answers/:id', (req, res) => {
     })
 
 })
+// UPVOTE an answer
+app.post('/answers/:id/votes', (req, res) => {
+
+})
 
 
 /** USERS */
